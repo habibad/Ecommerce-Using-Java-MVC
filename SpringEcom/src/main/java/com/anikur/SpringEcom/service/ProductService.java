@@ -3,6 +3,7 @@ package com.anikur.SpringEcom.service;
 import com.anikur.SpringEcom.model.Product;
 import com.anikur.SpringEcom.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public class ProductService {
     }
 
     public Product fetchProduct(int productId) {
-        return productRepo.getReferenceById(productId);
+        return productRepo.findById(productId).orElse(null);
     }
 }

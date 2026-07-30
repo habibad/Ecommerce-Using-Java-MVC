@@ -3,6 +3,8 @@ package com.anikur.SpringEcom.controller;
 import com.anikur.SpringEcom.model.Product;
 import com.anikur.SpringEcom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +16,20 @@ public class HelloController {
     @Autowired
     private ProductService productService;
     @GetMapping ("/products")
-    public List<Product> getAllProudct(){
-        return productService.fetchAll();
+    public ResponseEntity<List<Product>> getAllProudct(){
+        return new ResponseEntity<>(productService.fetchAll(), HttpStatus.OK);
     }
 //    product/6
     @GetMapping("/product/{product_id}")
-    public Product productData(@PathVariable("product_id") int product_id){
-        return productService.fetchProduct(product_id);
+    public ResponseEntity<Product> productData(@PathVariable("product_id") int product_id){
+        Product product = productService.fetchProduct(product_id);
+        if(product != null){
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
+    public void addData()
 }
