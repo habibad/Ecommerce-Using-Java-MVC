@@ -22,13 +22,12 @@ public class ProductService {
     }
 
     public ResponseEntity<?> saveData(Product product) {
-        Product insertProudct = productRepo.save(product);
-        try{
-
-            return new ResponseEntity<>(insertProudct, HttpStatus.CREATED);
-        }catch (Exception e){
-            return new ResponseEntity<>("insert Error: "+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            Product insertedProduct = productRepo.save(product);
+            return new ResponseEntity<>(insertedProduct, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 }

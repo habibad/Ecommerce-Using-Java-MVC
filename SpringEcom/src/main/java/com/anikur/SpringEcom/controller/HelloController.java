@@ -4,9 +4,13 @@ import com.anikur.SpringEcom.model.Product;
 import com.anikur.SpringEcom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,8 +35,14 @@ public class HelloController {
         }
 
     }
-    @PostMapping("/addProudct")
-    public ResponseEntity<?> addData(@RequestBody Product product){
+    @PostMapping(value = "/addProudct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addData(@RequestPart("product") String productJson, @RequestPart("image") MultipartFile image) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        Product product = mapper.readValue(productJson, Product.class);
+        product.setImageName(image.getOriginalFilename());
+        product.setImageType(image.getContentType());
+        product.setImageData(image.getBytes());
         return productService.saveData(product);
 
     }

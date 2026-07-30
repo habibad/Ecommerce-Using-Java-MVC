@@ -2,10 +2,7 @@ package com.anikur.SpringEcom.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,4 +32,10 @@ public class Product {
     private Boolean isAvailable;
 
     private Integer stockQuantity;
+
+    private String imageType;
+    private String imageName;
+    @Lob
+    @Column(columnDefinition = "BYTEA")
+    private byte[] imageData;
 }
