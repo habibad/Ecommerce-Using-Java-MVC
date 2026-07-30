@@ -1,5 +1,7 @@
 package com.anikur.SpringEcom.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,16 +17,22 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+
     private String name;
     private String description;
     private String brand;
     private BigDecimal price;
     private String category;
-    private Date releaseDate;
-    private boolean isAvailable;
-    private int stockQuantity;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date releaseDate;
+
+    @JsonProperty("isAvailable")
+    private Boolean isAvailable;
+
+    private Integer stockQuantity;
 }

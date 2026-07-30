@@ -31,5 +31,9 @@ public class HelloController {
         }
 
     }
-    public void addData()
+    @PostMapping("/addProudct")
+    public ResponseEntity<?> addData(@RequestBody Product product){
+        return productService.saveData(product);
+
+    }
 }
