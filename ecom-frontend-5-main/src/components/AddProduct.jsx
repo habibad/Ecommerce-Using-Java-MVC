@@ -10,7 +10,7 @@ const AddProduct = () => {
     category: "",
     stockQuantity: "",
     releaseDate: "",
-    productAvailable: false,
+    isAvailable: false,
   });
   const [image, setImage] = useState(null);
 
@@ -27,7 +27,7 @@ const AddProduct = () => {
   const submitHandler = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append("imageFile", image);
+    formData.append("image", image);
     formData.append(
       "product",
       new Blob([JSON.stringify(product)], { type: "application/json" })
@@ -175,11 +175,11 @@ const AddProduct = () => {
             <input
               className="form-check-input"
               type="checkbox"
-              name="productAvailable"
+              name="isAvailable"
               id="gridCheck"
-              checked={product.productAvailable}
+              checked={product.isAvailable}
               onChange={(e) =>
-                setProduct({ ...product, productAvailable: e.target.checked })
+                setProduct({ ...product, isAvailable: e.target.checked })
               }
             />
             <label className="form-check-label">Product Available</label>
