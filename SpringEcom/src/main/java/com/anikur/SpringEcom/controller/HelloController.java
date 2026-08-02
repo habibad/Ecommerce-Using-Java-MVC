@@ -89,4 +89,13 @@ public class HelloController {
             return new ResponseEntity<>("through error", HttpStatus.NOT_FOUND);
         }
     }
+
+    //added search api
+
+    @RequestMapping("/products/search")
+    public ResponseEntity<List<Product>> searchKeyword(@RequestPart String keyword){
+        List<Product> products = productService.searchProductKeyword(keyword);
+        System.out.println(keyword);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 }

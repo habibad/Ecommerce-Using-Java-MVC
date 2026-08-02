@@ -77,4 +77,8 @@ public class ProductService {
     public void deleteAction(Integer id) {
         productRepo.deleteById(id);
     }
+
+    public List<Product> searchProductKeyword(String keyword) {
+        return productRepo.keywordSearchQuery(keyword);
+    }
 }
