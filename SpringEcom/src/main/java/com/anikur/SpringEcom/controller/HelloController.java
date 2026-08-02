@@ -2,7 +2,6 @@ package com.anikur.SpringEcom.controller;
 
 import com.anikur.SpringEcom.model.Product;
 import com.anikur.SpringEcom.service.ProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,14 +35,9 @@ public class HelloController {
     }
 
     @PostMapping(value = "/addProudct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addData(@RequestPart("product") String productJson,
-                                     @RequestPart("image") MultipartFile image) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Product product = mapper.readValue(productJson, Product.class);
-        product.setImageName(image.getOriginalFilename());
-        product.setImageType(image.getContentType());
-        product.setImageData(image.getBytes());
-        return productService.saveData(product);
+    public ResponseEntity<?> addData(@RequestPart("product") Product product, @RequestPart("image") MultipartFile image) throws IOException {
+
+        return productService.saveData(product, image);
     }
 
     @PostMapping("/product")
@@ -70,9 +64,7 @@ public class HelloController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(product.getImageType()))
-                .body(product.getImageData());
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(product.getImageType())).body(product.getImageData());
     }
 
     @GetMapping("/updateProduct/{productID}/image")
@@ -85,5 +77,16 @@ public class HelloController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(product.getImageType()))
                 .body(product.getImageData());
+    }
+    @DeleteMapping("/deleteProduct/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("productId") int productId){
+        Product deleteProduct = productService.deleteProduct(productId);
+        if(deleteProduct != null){
+            productService.deleteAction(deleteProduct.getId());
+            return new ResponseEntity<>("Deleted product id is: "+ deleteProduct.getId(), HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("through error", HttpStatus.NOT_FOUND);
+        }
     }
 }

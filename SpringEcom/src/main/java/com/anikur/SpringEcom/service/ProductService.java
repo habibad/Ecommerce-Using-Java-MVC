@@ -24,8 +24,11 @@ public class ProductService {
         return productRepo.findById(productId).orElse(null);
     }
 
-    public ResponseEntity<?> saveData(Product product) {
+    public ResponseEntity<?> saveData(Product product, MultipartFile image) {
         try {
+            product.setImageName(image.getOriginalFilename());
+            product.setImageType(image.getContentType());
+            product.setImageData(image.getBytes());
             Product insertedProduct = productRepo.save(product);
             return new ResponseEntity<>(insertedProduct, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -65,5 +68,13 @@ public class ProductService {
 
     public Product fetchUpdateProductImage(int productID) {
         return productRepo.findById(productID).orElse(null);
+    }
+
+    public Product deleteProduct(int productId) {
+        return productRepo.findById(productId).orElse(null);
+    }
+
+    public void deleteAction(Integer id) {
+        productRepo.deleteById(id);
     }
 }
