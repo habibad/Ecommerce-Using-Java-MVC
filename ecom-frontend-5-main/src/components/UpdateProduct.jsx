@@ -28,7 +28,7 @@ const UpdateProduct = () => {
         setProduct(response.data);
       
         const responseImage = await axios.get(
-          `http://localhost:8080/api/product/${id}/image`,
+          `http://localhost:8080/api/updateProduct/${id}/image`,
           { responseType: "blob" }
         );
        const imageFile = await converUrlToFile(responseImage.data,response.data.imageName)
@@ -53,35 +53,34 @@ const UpdateProduct = () => {
     return file;
   }
  
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    console.log("images", image)
-    console.log("productsdfsfsf", updateProduct)
-    const updatedProduct = new FormData();
-    updatedProduct.append("imageFile", image);
-    updatedProduct.append(
-      "product",
-      new Blob([JSON.stringify(updateProduct)], { type: "application/json" })
-    );
-  
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  console.log("formData : ", updatedProduct)
-    axios
-      .put(`http://localhost:8080/api/product/${id}`, updatedProduct, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+  try {
+    const formData = new FormData();
+
+    formData.append(
+      "product",
+      new Blob([JSON.stringify(updateProduct)], {
+        type: "application/json",
       })
-      .then((response) => {
-        console.log("Product updated successfully:", updatedProduct);
-        alert("Product updated successfully!");
-      })
-      .catch((error) => {
-        console.error("Error updating product:", error);
-        console.log("product unsuccessfull update",updateProduct)
-        alert("Failed to update product. Please try again.");
-      });
-  };
+    );
+
+    formData.append("image", image);
+
+    const response = await axios.put(
+      `http://localhost:8080/api/updateProduct/${id}`,
+      formData
+    );
+
+    console.log("Product updated successfully:", response.data);
+    alert("Product updated successfully!");
+  } catch (error) {
+    console.error("Error updating product:", error);
+    console.error("Response:", error.response?.data);
+    alert("Failed to update product. Please try again.");
+  }
+};
  
 
   const handleChange = (e) => {
